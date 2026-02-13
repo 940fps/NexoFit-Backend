@@ -1,12 +1,11 @@
-version: '3.1'
+version: "3.1"
 services:
-
   db:
     image: mariadb
     container_name: mariadb_server
     restart: always
     env_file: .env
     environment:
-      MARIADB_ROOT_PASSWORD: ${DATABASE_PASS}
-      MARIADB_DATABASE: ${DATABASE_NAME}
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: nexofit
     ports: ["3306:3306"]
