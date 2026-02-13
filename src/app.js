@@ -1,4 +1,3 @@
-require('dotenv').config({ path: '.example.env' });
 const cors = require('cors');
 const express = require('express');
 const userRouter = require('./route/users');
