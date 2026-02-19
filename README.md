@@ -31,28 +31,7 @@ Sistema backend completo para la gestión de un gimnasio/centro fitness, incluye
 - MySQL/MariaDB >= 10.x
 - npm o yarn
 
-## 🔧 Instalación
-
-1. **Clonar el repositorio** (si aplica)
-
-```bash
-git clone <url-del-repo>
-cd NexoFit-Backend
-```
-
-2. **Instalar dependencias**
-
-```bash
-npm install
-```
-
-3. **Configurar variables de entorno**
-
-```bash
-cp .env.example .env
-```
-
-Edita el archivo `.env` con tus configuraciones:
+Variables del archivo `.env`:
 
 ```env
 DATABASE_HOST=localhost
@@ -231,32 +210,3 @@ Esto iniciará:
 
 - Base de datos MariaDB en puerto 3306
 - Adminer (UI para BD) en puerto 8081
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📝 Próximas Funcionalidades
-
-- [ ] Envío de emails (recuperación de contraseña)
-- [ ] Gestión completa de clases
-- [ ] Sistema de reservas
-- [ ] Panel de administración
-- [ ] Notificaciones push
-- [ ] Integración con pagos
-
-## 📄 Licencia
-
-Este proyecto es parte de NexoFit.
-
-## 👨‍💻 Soporte
-
-Para preguntas o problemas, por favor abre un issue en el repositorio.
-
----
-
-Desarrollado con ❤️ para NexoFit
