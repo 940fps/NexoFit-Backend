@@ -5,7 +5,4 @@ services:
     container_name: mariadb_server
     restart: always
     env_file: .env
-    environment:
-      MARIADB_ROOT_PASSWORD: password
-      MARIADB_DATABASE: nexofit
     ports: ["3306:3306"]
