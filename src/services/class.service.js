@@ -9,6 +9,7 @@ const { db } = require('../config/database');
  * Obtiene todas las clases registradas en el gimnasio.
  * @param {number} [modalityId] - (Opcional) ID de la modalidad para filtrar las clases.
  * @param {string} [search] - (Opcional) Término de búsqueda para filtrar por nombre de modalidad.
+
  * @returns {Promise<Array>} Lista de todas las clases.
  */
 async function findAllClasses(modalityId, search) {
@@ -19,7 +20,7 @@ async function findAllClasses(modalityId, search) {
 
  
   if (modalityId) query.where('classes.modality_id', modalityId);
-  if (search) query.where('modalities.title', 'like', %${search}%);
+  if (search) query.where('modalities.title', 'like', `%${search}%`);
 
   
   return query; 
