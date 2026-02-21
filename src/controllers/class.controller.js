@@ -12,7 +12,7 @@ const classService = require('../services/class');
  */
 async function getAllClasses(req, res) {
     try {
-        const classes = await classService.findAllClasses(req.query.modalityId);
+        const classes = await classService.findAllClasses(req.query.modalityId, req.query.search);
         res.status(200).json(classes);
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener las clases' });

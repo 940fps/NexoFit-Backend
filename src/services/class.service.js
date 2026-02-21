@@ -8,14 +8,21 @@ const { db } = require('../config/database');
 /**
  * Obtiene todas las clases registradas en el gimnasio.
  * @param {number} [modalityId] - (Opcional) ID de la modalidad para filtrar las clases.
+ * @param {string} [search] - (Opcional) Término de búsqueda para filtrar por nombre de modalidad.
  * @returns {Promise<Array>} Lista de todas las clases.
  */
-async function findAllClasses(modalityId) {
-  let query = db('classes').select('*');
-  if (modalityId) {
-    query = query.where('modality_id', modalityId);
-  }
-  return await query;
+async function findAllClasses(modalityId, search) {
+  
+  const query = db('classes')
+    .join('modalities', 'classes.modality_id', 'modalities.id')
+    .select('classes.*', 'modalities.title as modality_name');
+
+ 
+  if (modalityId) query.where('classes.modality_id', modalityId);
+  if (search) query.where('modalities.title', 'like', %${search}%);
+
+  
+  return query; 
 }
 
 /**
