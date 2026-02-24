@@ -3,37 +3,58 @@
  * @module validators/class.validator
  */
 
-function validateClassData(req, res, next) {
-    const { modalityId, instructorId, startTime, endTime, capacity } = req.body;
+const { body } = require("express-validator");
 
-    if (!modalityId || !instructorId || !startTime || !endTime || !capacity) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios por rellenar' });
-    }
+/**
+ * Validadores de clases
+ * Define reglas de validación para cada endpoint de clases
+ */
 
-    if (typeof modalityId !== 'number') {
-        return res.status(400).json({ error: 'La modalidad debe ser un número' });
-    }
-    if (typeof instructorId !== 'number') {
-        return res.status(400).json({ error: 'El ID del instructor debe ser un número' });
-    }
-    if (typeof capacity !== 'number') {
-        return res.status(400).json({ error: 'La capacidad de la clase debe ser un número' });
-    }
+/**
+ * Validación para crear/actualizar clase
+ */
+const validateClassData = [
+  body("modalityId")
+    .notEmpty()
+    .withMessage("La modalidad es requerida")
+    .isInt({ min: 1 })
+    .withMessage("La modalidad debe ser un número entero válido"),
 
-    if (capacity <= 0) {
-        return res.status(400).json({ error: 'La capacidad de la clase debe ser mayor que 0' });
-    }
+  body("instructorId")
+    .notEmpty()
+    .withMessage("El ID del instructor es requerido")
+    .isInt({ min: 1 })
+    .withMessage("El ID del instructor debe ser un número entero válido"),
 
-    const start = new Date(startTime);
-    const end = new Date(endTime);
+  body("startTime")
+    .notEmpty()
+    .withMessage("La hora de inicio es requerida")
+    .isISO8601()
+    .withMessage(
+      "La hora de inicio debe ser una fecha válida (formato ISO 8601)",
+    ),
 
-    if (end <= start) {
-        return res.status(400).json({ error: 'La hora de fin debe ser posterior a la de inicio' });
-    }
+  body("endTime")
+    .notEmpty()
+    .withMessage("La hora de fin es requerida")
+    .isISO8601()
+    .withMessage("La hora de fin debe ser una fecha válida (formato ISO 8601)")
+    .custom((value, { req }) => {
+      const start = new Date(req.body.startTime);
+      const end = new Date(value);
+      if (end <= start) {
+        throw new Error("La hora de fin debe ser posterior a la de inicio");
+      }
+      return true;
+    }),
 
-    next();
-}
+  body("capacity")
+    .notEmpty()
+    .withMessage("La capacidad es requerida")
+    .isInt({ min: 1 })
+    .withMessage("La capacidad debe ser un número entero mayor que 0"),
+];
 
 module.exports = {
-    validateClassData
+  validateClassData,
 };
