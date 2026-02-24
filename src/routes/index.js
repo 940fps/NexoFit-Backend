@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const authRoutes = require("./auth.route");
+const bookingRoutes = require('./booking.route');
 
 router.get("/health", (req, res) => {
   res.json({
@@ -12,5 +13,6 @@ router.get("/health", (req, res) => {
 });
 
 router.use("/auth", authRoutes);
+router.use('/bookings', bookingRoutes);
 
 module.exports = router;
