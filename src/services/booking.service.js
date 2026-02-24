@@ -29,7 +29,6 @@ async function findBookingByUserAndClass(userId, classId) {
     .first();
 }
 
-// ✨ Mejora Pro: Cuenta las reservas activas de una clase
 async function countActiveBookingsByClass(classId) {
   const result = await db('bookings')
     .where('class_id', classId)
@@ -37,7 +36,6 @@ async function countActiveBookingsByClass(classId) {
     .count('id as total')
     .first();
   
-  // Dependiendo de la versión de MariaDB/Knex, el count devuelve un string o un número
   return parseInt(result.total || 0, 10);
 }
 
