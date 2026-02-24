@@ -4,7 +4,7 @@
  */
 
 const bookingService = require('../services/booking.service');
-const classService = require('../services/class'); // Usamos la misma ruta que tus compañeros
+const classService = require('../services/class'); 
 
 async function getAllBookings(req, res) {
     try {
@@ -47,7 +47,7 @@ async function createBooking(req, res) {
         }
 
         const newBooking = await bookingService.addBooking(userId, classId);
-        res.status(201).json(newBooking); // 201 Created es mejor práctica para un POST
+        res.status(201).json(newBooking); 
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al crear la reserva' });

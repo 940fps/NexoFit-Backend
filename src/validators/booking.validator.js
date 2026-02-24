@@ -3,39 +3,37 @@
  * @module validators/booking.validator
  */
 
-function validateBookingData(req, res, next) {
-    const { userId, classId } = req.body;
+const { body } = require("express-validator");
 
-    if (!userId || !classId) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios por rellenar (userId, classId)' });
-    }
+/**
+ * Validación para crear reserva (POST)
+ */
+const validateBookingData = [
+  body("userId")
+    .notEmpty()
+    .withMessage("El ID del usuario es requerido")
+    .isInt({ min: 1 })
+    .withMessage("El ID del usuario debe ser un número entero válido"),
 
-    if (typeof userId !== 'number') {
-        return res.status(400).json({ error: 'El ID del usuario debe ser un número' });
-    }
-    if (typeof classId !== 'number') {
-        return res.status(400).json({ error: 'El ID de la clase debe ser un número' });
-    }
+  body("classId")
+    .notEmpty()
+    .withMessage("El ID de la clase es requerido")
+    .isInt({ min: 1 })
+    .withMessage("El ID de la clase debe ser un número entero válido"),
+];
 
-    next();
-}
-
-function validateBookingUpdate(req, res, next) {
-    const { status } = req.body;
-
-    if (!status) {
-        return res.status(400).json({ error: 'El campo status es obligatorio para actualizar' });
-    }
-
-    const validStatuses = ['confirmed', 'cancelled'];
-    if (!validStatuses.includes(status)) {
-        return res.status(400).json({ error: 'El estado debe ser únicamente "confirmed" o "cancelled"' });
-    }
-
-    next();
-}
+/**
+ * Validación para actualizar el estado de una reserva (PUT)
+ */
+const validateBookingUpdate = [
+  body("status")
+    .notEmpty()
+    .withMessage("El campo status es requerido para actualizar")
+    .isIn(['confirmed', 'cancelled'])
+    .withMessage('El estado debe ser únicamente "confirmed" o "cancelled"'),
+];
 
 module.exports = {
-    validateBookingData,
-    validateBookingUpdate
+  validateBookingData,
+  validateBookingUpdate,
 };
