@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const authRoutes = require("./auth.route");
-const bookingRoutes = require('./booking.route');
+const bookingRoutes = require("./booking.route");
+const modalityRoutes = require("./modality.route");
 
 router.get("/health", (req, res) => {
   res.json({
@@ -13,6 +14,7 @@ router.get("/health", (req, res) => {
 });
 
 router.use("/auth", authRoutes);
-router.use('/bookings', bookingRoutes);
+router.use("/bookings", bookingRoutes);
+router.use("/modalities", modalityRoutes);
 
 module.exports = router;
