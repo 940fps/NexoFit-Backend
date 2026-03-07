@@ -1,6 +1,6 @@
 const { body, param } = require("express-validator");
-import { getMaxAge } from "../utils/maxage.utils.js";
-import { confirmPassword } from "../utils/confirmpsw.utils.js";
+const { getMaxAge } = require("../utils/maxage.utils.js");
+const { confirmPassword } = require("../utils/confirmpsw.utils.js");
 
 /**
  * Validadores de autenticación
