@@ -1,3 +1,4 @@
+import { CheckValidDate } from "../utils/checkvaliddate.utils";
 /**
  * @file Middleware de validación para los datos de las clases.
  * @module validators/class.validator
@@ -40,12 +41,7 @@ const validateClassData = [
     .isISO8601()
     .withMessage("La hora de fin debe ser una fecha válida (formato ISO 8601)")
     .custom((value, { req }) => {
-      const start = new Date(req.body.startTime);
-      const end = new Date(value);
-      if (end <= start) {
-        throw new Error("La hora de fin debe ser posterior a la de inicio");
-      }
-      return true;
+      CheckValidDate(req.body.startTime, value);
     }),
 
   body("capacity")

@@ -1,4 +1,6 @@
 const { body, param } = require("express-validator");
+import { getMaxAge } from "../utils/maxage.utils.js";
+import { confirmPassword } from "../utils/confirmpsw.utils.js";
 
 /**
  * Validadores de autenticación
@@ -62,15 +64,7 @@ const registerValidation = [
     .optional()
     .isISO8601()
     .withMessage("Fecha de nacimiento inválida (formato: YYYY-MM-DD)")
-    .custom((value) => {
-      const birthDate = new Date(value);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      if (age < 13 || age > 120) {
-        throw new Error("Debes tener entre 13 y 120 años");
-      }
-      return true;
-    }),
+    .custom(getMaxAge),
 
   body("role")
     .optional()
@@ -137,15 +131,7 @@ const updateProfileValidation = [
     .optional()
     .isISO8601()
     .withMessage("Fecha de nacimiento inválida (formato: YYYY-MM-DD)")
-    .custom((value) => {
-      const birthDate = new Date(value);
-      const today = new Date();
-      const age = today.getFullYear() - birthDate.getFullYear();
-      if (age < 13 || age > 120) {
-        throw new Error("Debes tener entre 13 y 120 años");
-      }
-      return true;
-    }),
+    .custom(getMaxAge),
 
   body("weight")
     .optional()
@@ -205,10 +191,7 @@ const changePasswordValidation = [
     .notEmpty()
     .withMessage("La confirmación de contraseña es requerida")
     .custom((value, { req }) => {
-      if (value !== req.body.newPassword) {
-        throw new Error("Las contraseñas no coinciden");
-      }
-      return true;
+      confirmPassword(value, req.body.newPassword);
     }),
 ];
 

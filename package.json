@@ -4,9 +4,19 @@
   "description": "Backend API para NexoFit - Sistema de gestión de clases fitness",
   "main": "src/app.js",
   "scripts": {
-    "start": "node --env-file=.env src/app.js",
-    "dev": "nodemon --env-file=.env src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testMatch": [
+      "**/*.test.js"
+    ]
   },
   "keywords": [
     "fitness",

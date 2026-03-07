@@ -88,6 +88,16 @@ async function modifyClass(id, modalityId, instructorId, startTime, endTime, cap
 }
 
 /**
+ * Cuenta las reservas asociadas a una clase.
+ * @param {number} classId - ID de la clase.
+ * @returns {Promise<number>} Número de reservas activas.
+ */
+async function countBookingsByClass(classId) {
+  const result = await db('bookings').where('class_id', classId).count('id as total').first();
+  return result.total;
+}
+
+/**
  * Elimina una clase de forma definitiva de la base de datos.
  * @param {number} id - ID de la clase a eliminar.
  * @returns {Promise<void>}
@@ -112,5 +122,6 @@ module.exports = {
   addClass,
   modifyClass,
   removeClass,
-  findClass
+  findClass,
+  countBookingsByClass
 };

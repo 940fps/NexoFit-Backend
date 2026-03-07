@@ -99,16 +99,31 @@ async function updateClass(req, res) {
 
 /**
  * Elimina una clase específica basada en su ID.
- * @param {Object} req - Objeto de petición Express.
+ * Borrado controlado: si la clase tiene reservas asociadas, devuelve 409 con un aviso.
+ * Para confirmar el borrado con reservas, enviar ?force=true en la query.
+ * @param {Object} req - Objeto de petición Express (req.params.id, req.query.force).
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function deleteClass(req, res) {
-  try {
-    await classService.removeClass(req.params.id);
-    res.status(200).json({ message: "Clase eliminada correctamente" });
-  } catch (error) {
-    res.status(500).json({ error: "Error al eliminar la clase" });
-  }
+    try {
+        const existingClass = await classService.findClass(req.params.id);
+        if (!existingClass) {
+            return res.status(404).json({ error: 'La clase que intentas eliminar no existe' });
+        }
+
+        const bookingCount = await classService.countBookingsByClass(req.params.id);
+        if (bookingCount > 0 && req.query.force !== 'true') {
+            return res.status(409).json({
+                error: `La clase tiene ${bookingCount} reserva(s) asociada(s). Envía ?force=true para confirmar el borrado.`,
+                bookingCount
+            });
+        }
+
+        await classService.removeClass(req.params.id);
+        res.status(200).json({ message: 'Clase eliminada correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar la clase' });
+    }
 }
 
 module.exports = {
