@@ -3,7 +3,7 @@
  * @module controllers/class.controller
  */
 
-const classService = require('../services/class');
+const classService = require("../services/class.service");
 
 /**
  * Devuelve la lista de todas las clases.
@@ -11,12 +11,15 @@ const classService = require('../services/class');
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function getAllClasses(req, res) {
-    try {
-        const classes = await classService.findAllClasses(req.query.modalityId, req.query.search);
-        res.status(200).json(classes);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener las clases' });
-    }
+  try {
+    const classes = await classService.findAllClasses(
+      req.query.modalityId,
+      req.query.search,
+    );
+    res.status(200).json(classes);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener las clases" });
+  }
 }
 
 /**
@@ -25,17 +28,17 @@ async function getAllClasses(req, res) {
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function getClassById(req, res) {
-    try {
-        const classData = await classService.findClass(req.params.id);
-        
-        if (!classData) {
-            return res.status(404).json({ error: 'La clase solicitada no existe' });
-        }
-        
-        res.status(200).json(classData);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al obtener la clase' });
+  try {
+    const classData = await classService.findClass(req.params.id);
+
+    if (!classData) {
+      return res.status(404).json({ error: "La clase solicitada no existe" });
     }
+
+    res.status(200).json(classData);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener la clase" });
+  }
 }
 
 /**
@@ -44,20 +47,31 @@ async function getClassById(req, res) {
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function createClass(req, res) {
-    try {
-        const { modalityId, instructorId, startTime, endTime, capacity } = req.body;
-    
-        // Validación de negocio: Evitar solapamiento de clases para el mismo instructor
-        const classConflict = await classService.findClassByInstructorAndTime(instructorId, startTime);
-        if (classConflict) {
-            return res.status(400).json({ error: 'El instructor ya tiene clase a esa hora' });
-        }
+  try {
+    const { modalityId, instructorId, startTime, endTime, capacity } = req.body;
 
-        const newClass = await classService.addClass(modalityId, instructorId, startTime, endTime, capacity);
-        res.status(200).json(newClass);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al crear la clase' });
+    // Validación de negocio: Evitar solapamiento de clases para el mismo instructor
+    const classConflict = await classService.findClassByInstructorAndTime(
+      instructorId,
+      startTime,
+    );
+    if (classConflict) {
+      return res
+        .status(400)
+        .json({ error: "El instructor ya tiene clase a esa hora" });
     }
+
+    const newClass = await classService.addClass(
+      modalityId,
+      instructorId,
+      startTime,
+      endTime,
+      capacity,
+    );
+    res.status(200).json(newClass);
+  } catch (error) {
+    res.status(500).json({ error: "Error al crear la clase" });
+  }
 }
 
 /**
@@ -66,14 +80,21 @@ async function createClass(req, res) {
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function updateClass(req, res) {
-    try {
-        const { modalityId, instructorId, startTime, endTime, capacity } = req.body;
-    
-        const updatedClass = await classService.modifyClass(req.params.id, modalityId, instructorId, startTime, endTime, capacity);
-        res.status(200).json(updatedClass);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al actualizar la clase' });
-    }
+  try {
+    const { modalityId, instructorId, startTime, endTime, capacity } = req.body;
+
+    const updatedClass = await classService.modifyClass(
+      req.params.id,
+      modalityId,
+      instructorId,
+      startTime,
+      endTime,
+      capacity,
+    );
+    res.status(200).json(updatedClass);
+  } catch (error) {
+    res.status(500).json({ error: "Error al actualizar la clase" });
+  }
 }
 
 /**
@@ -82,18 +103,18 @@ async function updateClass(req, res) {
  * @param {Object} res - Objeto de respuesta Express.
  */
 async function deleteClass(req, res) {
-    try {
-        await classService.removeClass(req.params.id);
-        res.status(200).json({ message: 'Clase eliminada correctamente' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al eliminar la clase' });
-    }
+  try {
+    await classService.removeClass(req.params.id);
+    res.status(200).json({ message: "Clase eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar la clase" });
+  }
 }
 
 module.exports = {
-    getAllClasses,
-    getClassById,
-    createClass,
-    updateClass,
-    deleteClass
+  getAllClasses,
+  getClassById,
+  createClass,
+  updateClass,
+  deleteClass,
 };

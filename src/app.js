@@ -2,15 +2,14 @@ const cors = require("cors");
 const express = require("express");
 const routes = require("./routes");
 const { errorHandler, notFound } = require("./middlewares/errorHandler");
-const classRoutes = require('./routes/class'); 
 // Importamos las rutas de clase
 
 const app = express();
 
+console.log(process.env.DATABASE_PASS);
+
 app.use(cors());
 app.use(express.json());
-
-app.use('/classes',classRoutes); // Rutas de clases
 
 // API routes
 app.use("/api", routes);
