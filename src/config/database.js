@@ -9,6 +9,12 @@ const db = knex({
     password: process.env.DATABASE_PASS,
     database: process.env.DATABASE_NAME,
   },
+  pool: {
+    min: 1,
+    max: 3,
+    acquireTimeoutMillis: 30000,
+    idleTimeoutMillis: 30000,
+  },
   useNullAsDefault: true,
 });
 
