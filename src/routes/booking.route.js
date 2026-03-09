@@ -3,19 +3,34 @@
  * @module route/booking
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bookingController = require('../controllers/booking.controller');
-const bookingValidator = require('../validators/booking.validator');
+const bookingController = require("../controllers/booking.controller");
+const bookingValidator = require("../validators/booking.validator");
+const { authenticate } = require("../middlewares/auth.middleware");
 
-router.get('/', bookingController.getAllBookings);
+// Todas las rutas de bookings requieren autenticación
+router.use(authenticate);
 
-router.get('/:id', bookingController.getBookingById);
+// Obtener próximas clases reservadas del usuario
+router.get("/my-upcoming", bookingController.getMyUpcomingBookings);
 
-router.post('/', bookingValidator.validateBookingData, bookingController.createBooking);
+router.get("/", bookingController.getAllBookings);
 
-router.put('/:id', bookingValidator.validateBookingUpdate, bookingController.updateBooking);
+router.get("/:id", bookingController.getBookingById);
 
-router.delete('/:id', bookingController.deleteBooking);
+router.post(
+  "/",
+  bookingValidator.validateBookingData,
+  bookingController.createBooking,
+);
+
+router.put(
+  "/:id",
+  bookingValidator.validateBookingUpdate,
+  bookingController.updateBooking,
+);
+
+router.delete("/:id", bookingController.deleteBooking);
 
 module.exports = router;
