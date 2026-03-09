@@ -84,10 +84,83 @@ async function removeModality(id) {
   await db("modalities").where("id", id).del();
 }
 
+/**
+ * Obtiene una modalidad con todas sus clases (incluyendo información del instructor y disponibilidad).
+ * @param {number} id - ID de la modalidad.
+ * @returns {Promise<Object|null>} La modalidad con sus clases o null si no existe.
+ */
+async function findModalityWithClasses(id) {
+  // Obtener la modalidad
+  const modality = await db("modalities").where("id", id).first();
+
+  if (!modality) {
+    return null;
+  }
+
+  // Obtener todas las clases de esta modalidad con información del instructor
+  const classes = await db("classes")
+    .where("classes.modality_id", id)
+    .leftJoin("users", "classes.instructor_id", "users.id")
+    .select(
+      "classes.id",
+      "classes.start_time",
+      "classes.end_time",
+      "classes.capacity",
+      "users.first_name as instructor_first_name",
+      "users.last_name as instructor_last_name",
+    )
+    .orderBy("classes.start_time", "asc");
+
+  // Para cada clase, obtener el número de reservas confirmadas
+  for (let classItem of classes) {
+    const bookingsCount = await db("bookings")
+      .where("class_id", classItem.id)
+      .where("status", "confirmed")
+      .count("id as count")
+      .first();
+
+    classItem.current_bookings = bookingsCount.count;
+    classItem.is_full = classItem.current_bookings >= classItem.capacity;
+  }
+
+  modality.classes = classes;
+  return modality;
+}
+
+/**
+ * Busca modalidades por texto (título o descripción).
+ * @param {string} searchTerm - Término de búsqueda.
+ * @param {number} limit - Límite de resultados (default: 10).
+ * @returns {Promise<Array>} Lista de modalidades que coinciden con la búsqueda.
+ */
+async function searchModalities(searchTerm, limit = 10) {
+  const term = `%${searchTerm}%`;
+
+  return await db("modalities")
+    .select(
+      "modalities.id",
+      "modalities.title",
+      "modalities.description",
+      "modalities.image_url",
+      "category.title as category_title",
+    )
+    .leftJoin("category", "modalities.category_id", "category.id")
+    .where(function () {
+      this.where("modalities.title", "like", term).orWhere(
+        "modalities.description",
+        "like",
+        term,
+      );
+    })
+    .limit(limit);
+}
+
 module.exports = {
   findAllModalities,
   findModalityById,
   addModality,
   modifyModality,
   removeModality,
+  findModalityWithClasses,
+  searchModalities,
 };
