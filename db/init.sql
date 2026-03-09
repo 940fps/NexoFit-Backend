@@ -64,13 +64,15 @@ CREATE TABLE IF NOT EXISTS bookings (
 -- Inserción de Datos (Nuevos Inserts)
 -- -----------------------------------------------------
 
--- Usuarios (Se añade un usuario ID 5 para satisfacer las FK de clases y reservas)
-INSERT INTO users (id, first_name, last_name, email, password, role, phone) VALUES 
-(1, 'Admin', 'Principal', 'admin@nexofit.com', '123456', 'admin', '555-0001'),
-(2, 'Laura', 'Entrenadora', 'laura@nexofit.com', '123456', 'instructor', '555-0002'),
-(3, 'Carlos', 'González', 'carlos@nexofit.com', '123456', 'client', '555-0003'),
-(4, 'Ana', 'Martínez', 'ana@nexofit.com', '123456', 'client', '555-0004'),
-(5, 'Mario', 'Instructor', 'mario@nexofit.com', '123456', 'instructor', '555-0005');
+-- Usuarios
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `phone`, `birth_date`, `weight`, `height`, `role`, `image_url`, `is_active`, `created_at`) VALUES 
+(1, 'Admin', 'Principal', 'admin@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '555-0001', NULL, NULL, NULL, 'admin', NULL, 1, '2026-02-27 16:00:17'),
+(2, 'Paula', 'Entrenadora', 'paula@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '555-0002', NULL, NULL, NULL, 'instructor', NULL, 1, '2026-02-27 16:00:17'),
+(3, 'Carlos', 'González', 'carlos@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '555-0003', NULL, NULL, NULL, 'client', NULL, 1, '2026-02-27 16:00:17'),
+(4, 'Ana', 'Martínez', 'ana@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '555-0004', NULL, NULL, NULL, 'client', NULL, 1, '2026-02-27 16:00:17'),
+(5, 'Mario', 'Instructor', 'mario@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '555-0005', NULL, NULL, NULL, 'instructor', NULL, 1, '2026-02-27 16:00:17'),
+(8, 'Lorenzo', 'Lacarte', 'instructor@nexofit.com', '$2b$10$oRSC.ECKS3pQVv4FQ0lTJewmKJJ0go1Yy/wThBeybqN2uW5.k.Pxy', '123123123', NULL, NULL, NULL, 'instructor', 'https://media.licdn.com/dms/image/v2/D4D03AQGXfONd7RBaeg/profile-displayphoto-scale_200_200/B4DZu8418OIAAY-/0/1768400576851?e=1774483200&v=beta&t=Xph6x-oeJKHSISJt1aZh36TxTI5DStRSWwasPr4UgJk', 1, '2026-03-09 15:37:19'),
+(9, 'Marcos', 'Mesa', 'cliente@nexofit.com', '$2b$10$gJECd4vaw1LBOimUjvJQI.uTaxJFkARGqGMsf9J3CdqwmHOW.x0dG', '123123123', NULL, NULL, NULL, 'client', 'https://i.imgur.com/14DZX0q.jpeg', 1, '2026-03-09 15:38:49');
 
 -- Categorías
 INSERT INTO `category` (`id`, `title`, `description`, `slug`) VALUES 

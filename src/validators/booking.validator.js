@@ -9,15 +9,15 @@ const { body } = require("express-validator");
  * Validación para crear reserva (POST)
  */
 const validateBookingData = [
-  body("userId")
-    .notEmpty()
-    .withMessage("El ID del usuario es requerido")
-    .isInt({ min: 1 })
-    .withMessage("El ID del usuario debe ser un número entero válido"),
-
+  // classId es opcional en el validador porque ahora aceptamos tanto camelCase como snake_case
+  // y la validación real se hace en el controlador
   body("classId")
-    .notEmpty()
-    .withMessage("El ID de la clase es requerido")
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage("El ID de la clase debe ser un número entero válido"),
+
+  body("class_id")
+    .optional()
     .isInt({ min: 1 })
     .withMessage("El ID de la clase debe ser un número entero válido"),
 ];
@@ -29,7 +29,7 @@ const validateBookingUpdate = [
   body("status")
     .notEmpty()
     .withMessage("El campo status es requerido para actualizar")
-    .isIn(['confirmed', 'cancelled'])
+    .isIn(["confirmed", "cancelled"])
     .withMessage('El estado debe ser únicamente "confirmed" o "cancelled"'),
 ];
 

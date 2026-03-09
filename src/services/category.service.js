@@ -10,7 +10,7 @@ const { db } = require("../config/database");
  * @returns {Promise<Array>} Lista de categorías.
  */
 async function findAllCategories() {
-    return await db('category').select('*');
+  return await db("category").select("*");
 }
 
 /**
@@ -19,7 +19,7 @@ async function findAllCategories() {
  * @returns {Promise<Object|undefined>} La categoría o undefined si no existe.
  */
 async function findCategoryById(id) {
-    return await db('category').where('id', id).first();
+  return await db("category").where("id", id).first();
 }
 
 /**
@@ -28,7 +28,7 @@ async function findCategoryById(id) {
  * @returns {Promise<Object|undefined>} La categoría si existe el slug.
  */
 async function findCategoryBySlug(slug) {
-    return await db('category').where('slug', slug).first();
+  return await db("category").where("slug", slug).first();
 }
 
 /**
@@ -39,13 +39,13 @@ async function findCategoryBySlug(slug) {
  * @returns {Promise<Object>} El objeto de la categoría recién creada.
  */
 async function addCategory(title, description, slug) {
-    const [id] = await db('category').insert({
-        title,
-        description,
-        slug
-    });
+  const [id] = await db("category").insert({
+    title,
+    description,
+    slug,
+  });
 
-    return { id, title, description, slug };
+  return { id, title, description, slug };
 }
 
 /**
@@ -57,13 +57,13 @@ async function addCategory(title, description, slug) {
  * @returns {Promise<Object>} El objeto de la categoría actualizada.
  */
 async function modifyCategory(id, title, description, slug) {
-    await db('category').where('id', id).update({
-        title,
-        description,
-        slug
-    });
+  await db("category").where("id", id).update({
+    title,
+    description,
+    slug,
+  });
 
-    return { id, title, description, slug };
+  return { id, title, description, slug };
 }
 
 /**
@@ -72,14 +72,36 @@ async function modifyCategory(id, title, description, slug) {
  * @returns {Promise<void>}
  */
 async function removeCategory(id) {
-    await db('category').where('id', id).del();
+  await db("category").where("id", id).del();
+}
+
+/**
+ * Obtiene todas las categorías con sus primeras 3 modalidades.
+ * @returns {Promise<Array>} Lista de categorías con sus modalidades.
+ */
+async function findCategoriesWithModalities() {
+  // Obtener todas las categorías
+  const categories = await db("category").select("*").orderBy("id", "asc");
+
+  // Para cada categoría, obtener TODAS sus modalidades (sin límite)
+  for (let category of categories) {
+    const modalities = await db("modalities")
+      .where("category_id", category.id)
+      .select("id", "title", "description", "image_url")
+      .orderBy("id", "asc");
+
+    category.modalities = modalities;
+  }
+
+  return categories;
 }
 
 module.exports = {
-    findAllCategories,
-    findCategoryById,
-    findCategoryBySlug,
-    addCategory,
-    modifyCategory,
-    removeCategory
+  findAllCategories,
+  findCategoryById,
+  findCategoryBySlug,
+  addCategory,
+  modifyCategory,
+  removeCategory,
+  findCategoriesWithModalities,
 };
