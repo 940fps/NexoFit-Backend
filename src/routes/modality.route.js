@@ -13,6 +13,14 @@ const { handleValidationErrors } = require("../middlewares/errorHandler");
 // GET: http://localhost:8080/modalities
 router.get("/", modalityController.getAllModalities);
 
+// Buscar modalidades por texto
+// GET: http://localhost:8080/modalities/search?q=yoga&limit=10
+router.get("/search", modalityController.searchModalities);
+
+// Obtener una modalidad con todas sus clases
+// GET: http://localhost:8080/modalities/:id/with-classes
+router.get("/:id/with-classes", modalityController.getModalityWithClasses);
+
 // Obtener una modalidad específica por su ID
 // GET: http://localhost:8080/modalities/:id
 router.get("/:id", modalityController.getModalityById);
