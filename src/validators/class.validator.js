@@ -41,7 +41,7 @@ const validateClassData = [
     .isISO8601()
     .withMessage("La hora de fin debe ser una fecha válida (formato ISO 8601)")
     .custom((value, { req }) => {
-      CheckValidDate(req.body.startTime, value);
+      return CheckValidDate(req.body.startTime, value);
     }),
 
   body("capacity")
